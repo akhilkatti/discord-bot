@@ -1,8 +1,9 @@
+
 require("dotenv").config();
-
 const Discord = require('discord.js');
-
+const axios = require('axios');
 const client = new Discord.Client();
+// const fetch = require('node-fetch');
 
 client.login(process.env.BOTTOKEN);
 
@@ -24,12 +25,33 @@ replies = [
     'It’s rainin mahfuckuhs'
 ]
 
-client.on('message', (msg) => {
-    if(msg.channel.id === '900432030435799181' && msg.content === '!quote'){
-        // msg.reply('gnomeeesayyinnn!!')
-        const index = Math.floor(Math.random() * replies.length);
-        msg.channel.send(replies[index]);
+client.on('message', sendMessage)
+
+async function sendMessage(msg){
+    if(msg.channel.id === '900432030435799181'){
+        let args = msg.content.split(" ");
+
+        if(args[0] === '!quote'){
+            // msg.reply('gnomeeesayyinnn!!')
+            const index = Math.floor(Math.random() * replies.length);
+            msg.channel.send(replies[index]);
+        } else if(args[0] === '!gif'){
+            // msg.channel.send("gif!");
+            keyword= "jroc"
+            if (args.length > 1){
+                keyword = args.slice(1, args.length).join(" ");
+            }
+            url = `https://g.tenor.com/v1/search?q=${keyword}&key=${process.env.TENORKEY}`;
+            axios.get(url)
+                .then(function (response) {
+                    let index = Math.floor(Math.random() * response.data.results.length)
+                    msg.channel.send(response.data.results[index].url);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
     }
-})
+}
 
 
