@@ -1,9 +1,9 @@
-
-require("dotenv").config();
+// console.log("hi")
 const Discord = require('discord.js');
 const axios = require('axios');
 const client = new Discord.Client();
 // const fetch = require('node-fetch');
+require("dotenv").config();
 
 client.login(process.env.BOTTOKEN);
 
@@ -12,6 +12,13 @@ client.on('ready',readyDiscord);
 function readyDiscord() {
     console.log('logged in!! gnomesayinnn!')
 }
+
+client.on('guildMemberAdd', (member) => {
+    const channelId = "876398794915344426";
+    const message = `Welcome <@${member.id}>,let's fuckin goo mafucka!!`;
+    const channel = member.guild.channels.cache.get(channelId);
+    channel.send(message);
+})
 replies = [
     'In this park it’s one muthafucka for one and all muthafucka for all muthafucka’s',
     'We ain’t down with killin’, we down with chillin’. Peace!',
@@ -28,7 +35,7 @@ replies = [
 client.on('message', sendMessage)
 
 async function sendMessage(msg){
-    if(msg.channel.id === '900432030435799181'){
+    // if(msg.channel.id === '900432030435799181'){
         let args = msg.content.split(" ");
 
         if(args[0] === '!quote'){
@@ -51,7 +58,7 @@ async function sendMessage(msg){
                     console.log(error);
                 })
         }
-    }
+    // }
 }
 
 
